@@ -25,7 +25,9 @@ def predict_img(image_data):
     predicted_class = np.argmax(predictions, axis = 1)
 
     predicted_label = class_labels[predicted_class[0]]
-    return predicted_label
+    predictions = np.round(predictions[0] * 100, 2)
+
+    return predicted_label, predictions
 
 @app.route('/')
 def home():
