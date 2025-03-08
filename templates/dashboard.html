@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset="UTF-8">
+    <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
+    <link rel = "icon" type = "image/x-icon" href = "{{ url_for('static', filename = 'favicon.ico') }}">
+    <link rel = "icon" type = "image/png" href = "{{ url_for('static', filename = 'icons/favicon-32x32.png') }}">
+    <link rel = "manifest" href = "{{ url_for('static', filename = 'manifest.json') }}">
+    <link rel = "icon" type = "image/png" sizes = "192x192" href = "{{ url_for('static', filename = 'icons/android-chrome-192x192.png') }}">
+    <!-- <link rel = "icon" type = "image/png" sizes = "512x512" href = "{{ url_for('static', filename = 'icons/android-chrome-512x512.png') }}"> -->
+    <link rel = "apple-touch-icon" sizes = "180x180" href = "{{ url_for('static', filename = 'icons/apple-touch-icon.png') }}">
+    <link rel = "apple-touch-icon" type = "image/png" sizes = "192x192" href = "{{ url_for('static', filename = 'icons/android-chrome-192x192.png') }}">
+    <link rel = "apple-touch-icon" type = "image/png" sizes = "512x512" href = "{{ url_for('static', filename = 'icons/android-chrome-512x512.png') }}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #fff9dc;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        h2 {
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background-color: rgb(63, 63, 63);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+        }
+        .alert-warning {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input[type = "file"] {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid rgb(255, 81, 0);
+            border-radius: 5px;
+            color: white;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: rgb(255, 81, 0);
+            color: white;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: rgb(255, 81, 0);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                width: 90%;
+                padding: 15px;
+            }
+
+            h2 {
+                font-size: 24px;
+            }
+
+            input[type = "file"], button {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>UPLOAD IMAGES</h2>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class = "alert alert-warning">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form action = "/submit" method = "post" enctype = "multipart/form-data">
+            <input type = "file" name = "images" accept = ".jpeg,.jpg,.png" multiple required>
+            <button type = "submit">UPLOAD</button>
+        </form>
+    </div>
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("/service-worker.js")
+                .then(reg => console.log("Service Worker Registered!", reg))
+                .catch(err => console.log("Service Worker Failed!", err));
+        }
+    </script>
+</body>
+</html>

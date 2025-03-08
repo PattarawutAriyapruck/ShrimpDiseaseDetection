@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset="UTF-8">
+    <meta name = "viewport" content = "width=device-width, initial-scale = 1.0">
+    <link rel = "icon" type = "image/x-icon" href = "{{ url_for('static', filename = 'favicon.ico') }}">
+    <link rel = "icon" type = "image/png" href = "{{ url_for('static', filename = 'icons/favicon-32x32.png') }}">
+    <link rel = "manifest" href = "{{ url_for('static', filename = 'manifest.json') }}">
+    <link rel = "icon" type = "image/png" sizes = "192x192" href = "{{ url_for('static', filename = 'icons/android-chrome-192x192.png') }}">
+    <!-- <link rel = "icon" type = "image/png" sizes = "512x512" href = "{{ url_for('static', filename = 'icons/android-chrome-512x512.png') }}"> -->
+    <link rel = "apple-touch-icon" sizes = "180x180" href = "{{ url_for('static', filename = 'icons/apple-touch-icon.png') }}">
+    <link rel = "apple-touch-icon" type = "image/png" sizes = "192x192" href = "{{ url_for('static', filename = 'icons/android-chrome-192x192.png') }}">
+    <link rel = "apple-touch-icon" type = "image/png" sizes = "512x512" href = "{{ url_for('static', filename = 'icons/android-chrome-512x512.png') }}">
+    <style>
+        .fixed-header {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            background-color: rgb(63, 63, 63);
+            padding: 15px;
+            text-align: center;
+            font-size: 16px;
+            font-weight: bold;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.2); 
+            z-index: 9999;
+        }
+        html, body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #fff9dc;
+            padding-top: 100px
+        }
+        h2 {
+            margin: 10px;
+            margin-top: 0;
+            color: white;
+        }
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 10px;
+        }
+        .image-container {
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            margin: 10px;
+            padding: 10px;
+            max-width: 90%;
+            text-align: center;
+            cursor: pointer; 
+        }
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: block;  
+        }
+        .image-container.selected {
+            box-shadow: 0px 4px 12px rgb(255, 81, 0);
+            border: 3px solid rgb(255, 95, 20);
+        }
+        p {
+            font-size: 14px;
+            color: #333;
+            margin-top: 15px;
+            word-break: break-word;
+        }
+        .fixed-header a {
+            position: absolute;
+            top: 10px;  
+            left: 20px; 
+            font-size: 16px;
+            text-decoration: none;
+            color: rgb(63, 63, 63);
+            background-color: #fff9dc;
+            padding: 5px;
+            border-radius: 5px;
+        }
+        .select-all, .download-btn {
+            font-weight: bold;
+            margin: 5px;
+            padding: 10px 20px;
+            border-radius: 5px;
+            font-size: 16px;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .select-all {
+            background: rgb(255, 81, 0);
+        }
+        .select-all:hover {
+            background: rgb(255, 81, 0);
+        }
+        .download-btn {
+            color: rgb(63, 63, 63);
+            background: #fff9dc;
+        }
+        .download-btn:hover {
+            background: #fff9dc;
+        }
+        @media (min-width: 600px) {
+            .image-container {
+                max-width: 300px;
+            }
+            .info-btn {
+                font-size: 14px; 
+                width: 20px;
+                height: 20px;
+            }
+        }
+        .image-checkbox {
+            display: none; 
+        }
+        #selected-count {
+            font-size: 16px;
+            color: white;
+            background-color: rgb(255, 81, 0);
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            margin: 5px;
+            transition: all 0.3s ease-in-out;
+        }
+        #info {
+            color: white
+        }
+        #download-font{
+            font-size: 12px;
+        }
+        .download-container {
+            position: relative; 
+            display: inline-block; 
+        }
+        .info-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background-color: rgb(63, 63, 63);
+            border-radius: 50%;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            color: rgb(255, 255, 255);
+            z-index: 10; 
+            width: 25px; 
+            height: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .info-btn:hover {
+            color: rgb(255, 255, 255);
+        }
+        .info-box {
+            position: absolute;
+            bottom: 5px;
+            right: 5px; 
+            background: rgba(54, 54, 54, 0.911);
+            color: rgb(255, 255, 255);
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 14px;
+            width: 200px;
+            text-align: left;
+            display: none; 
+        }
+
+        .info-box.show {
+            display: block;
+        }
+        .popup {
+            display: none;
+            position: absolute;
+            top: 100%; 
+            background: #fff9dc;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            z-index: 9999;
+        }
+
+        .popup button {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 5px 0;
+            background: rgb(255, 81, 0);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .popup button:hover {
+            background: rgb(255, 81, 0);
+        }
+        #download-options {
+            position: absolute;
+            background: #fff9dc;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            z-index: 9999;
+            display: none;
+        }
+    </style>
+    <!-- <script src = "https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src = "https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>     -->
+    <script src = "{{ url_for('static', filename = 'js/jszip.min.js') }}"></script>
+    <script src = "{{ url_for('static', filename = 'js/FileSaver.min.js') }}"></script> 
+</head>
+<body>
+    <div class = "fixed-header">
+        <a href = "/"> BACK </a>
+        <h2>UPLOADED IMAGES</h2>
+        <button class = "select-all" onclick = "toggleSelectAll()">SELECT ALL</button>
+
+        <div class="download-container">
+            <button class = "download-btn" onclick = "showDownloadOptions()">DOWNLOAD</button>
+            <div id = "download-options" class = "popup">
+                <button id = "download-font" onclick = "downloadSelected('images')">DOWNLOAD IMAGES</button>
+                <button id = "download-font" onclick = "downloadSelected('zip')">DOWNLOAD AS ZIP</button>
+            </div>
+        </div>
+
+        <p id = "selected-count">SELECTED: 0</p>
+    </div>
+
+    <div class = "container">
+        {% for image, prediction in zipped_data %}
+            <div class = "image-container" onclick = "toggleSelection(this)">
+                
+                <span class = "info-btn" onclick = "showDetails(event, this)">i</span>
+
+                <div class="info-box">
+                    <p id = "info"><strong>Filename:</strong> {{ image.filename }}</p>
+                    <p id = "info"><strong>Prediction:</strong> {{ prediction.prediction }}</p>
+                    <p id = "info"><strong>Size:</strong> {{ image.width }} x {{ image.height }} px</p>
+                    <p id = "info"><strong>Uploaded at:</strong> {{ image.upload_time }}</p>
+                </div>
+
+                <img src = "{{ image.url }}" alt = "Uploaded Image">
+                <p>Image Name : {{ prediction.prediction }}_{{ prediction.number }}</p>
+                <p>Prediction : {{ prediction.prediction }}</p>
+
+                <input type = "checkbox" class = "image-checkbox" data-url = "{{ image.url }}" data-filename = "{{ image.filename }}" 
+                data-predict = "{{ prediction.prediction }}_{{ prediction.number }}" hidden />
+            </div>
+        {% endfor %}
+    </div>
+    <script>
+        function updateSelectedCount() {
+            var selectedImages = document.querySelectorAll('.image-checkbox:checked').length;
+            document.getElementById('selected-count').textContent = "SELECTED: " + selectedImages;
+        }
+
+        function toggleSelection(container) {
+            var checkbox = container.querySelector('.image-checkbox');
+            checkbox.checked = !checkbox.checked;
+            container.classList.toggle('selected', checkbox.checked);
+            updateSelectedCount();
+
+            updateSelectAllButton(); 
+        }
+
+        function toggleSelectAll() {
+            var checkboxes = document.querySelectorAll('.image-checkbox');
+            var isAnySelected = Array.from(checkboxes).some(checkbox => checkbox.checked); 
+
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = !isAnySelected; 
+                checkbox.closest('.image-container').classList.toggle('selected', checkbox.checked);
+            });
+
+            updateSelectedCount();
+            updateSelectAllButton(); 
+        }
+
+        function updateSelectAllButton() {
+            var checkboxes = document.querySelectorAll('.image-checkbox');
+            var isAnySelected = Array.from(checkboxes).some(checkbox => checkbox.checked);
+            document.querySelector('.select-all').textContent = isAnySelected ? "DESELECT All" : "SELECT All";
+        }
+
+        function showDownloadOptions() {
+            var options = document.getElementById("download-options");
+            var btn = document.querySelector(".download-btn");
+
+            if (options.style.display === "block") {
+                options.style.display = "none";
+            } else {
+                options.style.display = "block";
+                }
+        }
+
+        document.addEventListener("click", function(event) {
+            var options = document.getElementById("download-options");
+            var btn = document.querySelector(".download-btn");
+            
+            if (!options.contains(event.target) && !btn.contains(event.target)) {
+                options.style.display = "none";
+            }
+        });
+
+        function downloadSelected(type) {
+            var selectedImages = document.querySelectorAll('.image-checkbox:checked');
+            if (selectedImages.length === 0) {
+                alert('Please select at least one image to download.');
+                return;
+            }
+
+            document.getElementById("download-options").style.display = "none";
+
+            if (type === "images") {
+                selectedImages.forEach(checkbox => {
+                    var imageUrl = checkbox.getAttribute('data-url');
+                    var filename = checkbox.getAttribute('data-predict') || 'image.jpg';
+                    var link = document.createElement('a');
+                    link.href = imageUrl;
+                    link.download = filename;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                });
+                document.querySelectorAll('.image-checkbox').forEach(checkbox => {
+                    checkbox.checked = false;
+                    checkbox.closest('.image-container').classList.remove('selected');
+                });
+
+                document.querySelector('.select-all').textContent = "SELECT All";
+
+                updateSelectedCount();
+            } else if (type === "zip") {
+                var zip = new JSZip();
+                var count = 0;
+
+                selectedImages.forEach(checkbox => {
+                    var imageUrl = checkbox.getAttribute('data-url');
+                    var filename = checkbox.getAttribute('data-predict') || `image${count + 1}.jpg`;
+                    if (!filename.endsWith('.jpg')) {
+                        filename += '.jpg';
+                    }
+
+                    fetch(imageUrl)
+                        .then(response => response.blob())
+                        .then(blob => {
+                            var reader = new FileReader();
+                            reader.readAsArrayBuffer(blob);
+                            reader.onloadend = function() {
+                                zip.file(filename, reader.result, { binary: true });
+                                count++;
+
+                                if (count === selectedImages.length) {
+                                    zip.generateAsync({ type: "blob" }).then(function(content) {
+                                        saveAs(content, "images.zip");
+                                    });
+                                }
+                            };
+                        })
+                        .catch(error => console.error("Error fetching image:", error));
+                });
+            }
+
+            document.getElementById("download-options").style.display = "none";
+            document.querySelectorAll('.image-checkbox').forEach(checkbox => {
+                checkbox.checked = false;
+                checkbox.closest('.image-container').classList.remove('selected');
+            });
+
+            document.querySelector('.select-all').textContent = "SELECT All";
+
+            updateSelectedCount();
+        }
+
+        function showDetails(event, button) {
+            event.stopPropagation(); 
+
+            var infoBox = button.nextElementSibling;
+
+            document.querySelectorAll('.info-box').forEach(box => {
+                if (box !== infoBox) {
+                    box.classList.remove('show');
+                }
+            });
+
+            infoBox.classList.toggle('show');
+        }
+
+        document.addEventListener('click', function(event) {
+            if (!event.target.closest('.info-btn')) {
+                document.querySelectorAll('.info-box').forEach(box => box.classList.remove('show'));
+            }
+        });
+    </script>
+    <script>
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.register("/service-worker.js")
+                .then(reg => console.log("Service Worker Registered!", reg))
+                .catch(err => console.log("Service Worker Failed!", err));
+        }
+    </script>
+</body>
+</html>

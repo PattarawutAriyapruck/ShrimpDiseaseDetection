@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: shrimp-disease-classify
+    env: python
+    plan: free
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "python app.py"
+    autoDeploy: true
+    branches:
+      - main
+    envVars:
+      - key: FLASK_APP
+        value: "app.py"
+      - key: FLASK_ENV
+        value: "production"
+    persistentDisks:
+      - size: 10GB
