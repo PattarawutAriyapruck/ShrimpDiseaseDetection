@@ -1,4 +1,4 @@
-#Shrimp Disease Detection
+# Shrimp Disease Detection
 
 This project uses TensorFlow to create a model for detecting shrimp diseases from images. The model is deployed on a Flask web application and hosted on Render.
 
