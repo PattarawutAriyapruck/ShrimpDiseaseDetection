@@ -1,5 +1,8 @@
-# My Senior Project - Deep Learning-Based Web Application for Shrimp Disease Detection Using Transfer Learing
+#Shrimp Disease Detection
 
-Using Tensorflow to create best model for shrimp disease detection. Then create website with Flask framework and deployment on render.
+This project uses TensorFlow to create a model for detecting shrimp diseases from images. The model is deployed on a Flask web application and hosted on Render.
 
-Link Website: https://shrimpclassify.onrender.com/
+## Features
+- **TensorFlow-based model**: Trained to detect healthy and diseased shrimp.
+- **Flask Web Application**: Allows users to upload shrimp images for disease detection.
+- **Deployment on Render**: The application is hosted on [Render](https://shrimpclassify.onrender.com/), a platform for deploying web apps.
