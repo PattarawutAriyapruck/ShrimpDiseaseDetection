@@ -7,6 +7,7 @@ from PIL import Image
 import tensorflow as tf
 from tensorflow.keras.preprocessing import image # type: ignore
 from tensorflow.keras.models import load_model # type: ignore
+import os
 app = Flask(__name__)
 app.secret_key = 'shrimp_secret_key'  
 
@@ -85,4 +86,5 @@ def service_worker():
     return app.send_static_file('service-worker.js')
 
 if __name__ == '__main__':
-    app.run(host = '0.0.0.0', port = 10000) 
+    port = int(os.environ.get("PORT", 10000)) 
+    app.run(host="0.0.0.0", port = port)
