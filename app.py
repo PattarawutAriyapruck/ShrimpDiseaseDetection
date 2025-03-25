@@ -50,11 +50,16 @@ def submit():
     for file in files:
         image_data = file.read()
         img = Image.open(BytesIO(image_data))
-
         width, height = img.size
-
         timestamp = datetime.datetime.now().strftime("%d/%m/%y %H:%M:%S")
-
+        
+        img_resized = img.resize((224, 224))
+        img_buffer = BytesIO()
+        img_resized.save(img_buffer, format = "JPEG")
+        resized_image_data = img_buffer.getvalue()
+        resized_image_base64 = base64.b64encode(resized_image_data).decode('utf-8')
+        resized_image_url = f"data:image/jpeg;base64,{resized_image_base64}"
+        
         image_base64 = base64.b64encode(image_data).decode('utf-8')
         image_url = f"data:image/jpeg;base64,{image_base64}"
 
@@ -62,6 +67,7 @@ def submit():
 
         images.append({'filename': file.filename, 
                        'url': image_url, 
+                       'url_resize': resized_image_url,
                        'width': width,
                        'height': height,
                        'upload_time': timestamp})
