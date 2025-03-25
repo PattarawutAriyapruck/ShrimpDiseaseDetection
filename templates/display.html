@@ -250,7 +250,7 @@
                     <p id = "info"><strong>Uploaded at:</strong> {{ image.upload_time }}</p>
                 </div>
 
-                <img src = "{{ image.url }}" alt = "Uploaded Image">
+                <img src = "{{ image.url_resize }}" alt = "Uploaded Image">
                 <p>Prediction : {{ prediction.prediction[0] }}</p>
                 <p>AHPND_100x : {{ prediction.prediction[1][0] }}%</p>
                 <p>EHP_x100 : {{ prediction.prediction[1][1] }}%</p>
