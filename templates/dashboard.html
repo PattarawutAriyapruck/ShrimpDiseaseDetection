@@ -78,6 +78,26 @@
             background-color: rgb(255, 81, 0);
         }
 
+        .logo-container {
+            display: flex; 
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            padding: 10px 0;
+            flex-wrap: wrap;  
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgb(63, 63, 63); 
+            z-index: 1000;
+        }
+
+        .logo-container img {
+            max-width: 150px;
+            height: auto;
+        }
+
         @media (max-width: 600px) {
             .container {
                 width: 90%;
@@ -91,12 +111,27 @@
             input[type = "file"], button {
                 font-size: 14px;
             }
+
+            .logo-container {
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .logo-container img {
+                max-width: 65px;
+            }
         }
     </style>
 </head>
 <body>
-
-    <div class="container">
+    <div class="logo-container">
+        <img src="{{ url_for('static', filename='Mahidol_U.png') }}" alt="Logo">
+        <img src="{{ url_for('static', filename='logo-biotec.png') }}" alt="Logo">
+        <img src="{{ url_for('static', filename='DE.jpg') }}" alt="Logo">
+        <img src="{{ url_for('static', filename='logo-nstda.png') }}" alt="Logo">
+        <img src="{{ url_for('static', filename='shrimp.png') }}" alt="Logo">
+    </div>
+    <div class = "container">
         <h2>UPLOAD IMAGES</h2>
 
         {% with messages = get_flashed_messages(with_categories=true) %}
