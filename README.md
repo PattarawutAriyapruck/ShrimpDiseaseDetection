@@ -9,4 +9,4 @@ This project uses TensorFlow to create a model for detecting shrimp diseases fro
 
 ## Presentation
 - **SciEx2025**: Present a poster at The 26th Science Project Exhibition Mahidol University.
-- **NAC2025**: Show the website at The 20th NSTDA Annual Conference: NAC2025.
+- **NAC2025**: Show the website at The 20th NSTDA Annual Conference: [NAC2025](https://www.youtube.com/watch?si=XNt3_VvobTwUeVVv&v=zqnJY7Be5J0&feature=youtu.be).
