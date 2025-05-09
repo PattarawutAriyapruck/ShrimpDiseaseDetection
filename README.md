@@ -8,5 +8,5 @@ This project uses TensorFlow to create a model for detecting shrimp diseases fro
 - **Deployment on Render**: The application is hosted on [Render](https://shrimpclassify.onrender.com/), a platform for deploying web apps.
 
 ## Presentation
-- **SciEx 2025**: Present a poster at The 26th Science Project Exhibition Mahidol University.
+- **SciEx2025**: Present a poster at The 26th Science Project Exhibition Mahidol University.
 - **NAC2025**: Show the website at The 20th NSTDA Annual Conference: NAC2025.
